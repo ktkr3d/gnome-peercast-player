@@ -5,7 +5,20 @@ GNOME Peercast Player
 - 2016-05-08  
   ![GNOME Peercast Player](gnome-peercast-player-20160508.png)
 
+# Requirement
+- GNOME 3.20
+- vlc
+- webit
+- Peercast
+
 # Install
 ```bash
-$ sudo apt-get install vlc apt-get install gir1.2-webkit-3.0
+$ sudo apt-get install vlc gir1.2-webkit-3.0
+$ pip install python-vlc
+$ git clone https://github.com/ktkr3d/gnome-peercast-player.git
+```
+
+# Start application
+```bash
+$ python gpp-main.py
 ```
