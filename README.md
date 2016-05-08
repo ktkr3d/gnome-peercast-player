@@ -3,7 +3,7 @@ GNOME Peercast Player
 
 # Screenshots
 - 2016-05-08  
-  ![GNOME Peercast Player](http://ktkr3d.github.io/images/gnome-peercast-player-20160508-01.png)
+  ![GNOME Peercast Player](gnome-peercast-player-20160508.png)
 
 # Install
 ```bash
