@@ -17,6 +17,8 @@ $ sudo apt-get install vlc gir1.2-webkit-3.0
 $ pip install python-vlc
 $ git clone https://github.com/ktkr3d/gnome-peercast-player.git
 $ cd gnome-peercast-player
+$ autoreconf
+$ automake
 $ ./configure
 $ make
 $ sudo make install
