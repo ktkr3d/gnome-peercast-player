@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Exec=gnome-peercast-player
+Name=GNOME Peercast Player
+Categories=Utility;GTK
+Icon=gnome-peercast-player

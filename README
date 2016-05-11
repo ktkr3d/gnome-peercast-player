@@ -1,0 +1,9 @@
+1. ソースコードファイルの作成
+2. autoscan
+3. configure.scan -> configure.ac
+4. touch AUTHORS ChangeLog README NEWS
+4. autoreconf -v
+5. automake --add-missing
+4. autoreconf -v
+./configure
+

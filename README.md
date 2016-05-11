@@ -16,9 +16,13 @@ GNOME Peercast Player
 $ sudo apt-get install vlc gir1.2-webkit-3.0
 $ pip install python-vlc
 $ git clone https://github.com/ktkr3d/gnome-peercast-player.git
+$ cd gnome-peercast-player
+$ ./configure
+$ make
+$ sudo make install
 ```
 
 # Start application
 ```bash
-$ python gpp-main.py
+$ gnome-peercast-player
 ```

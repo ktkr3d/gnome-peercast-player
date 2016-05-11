@@ -65,3 +65,15 @@ target/
 poi/
 *~
 *.mp4
+
+# autotools
+Makefile
+Makefile.in
+autom4te.cache
+*.log
+config.status
+src/gnome-peercast-player
+*.pyc
+*.tar.gz
+aclocal.m4
+configure.scan
