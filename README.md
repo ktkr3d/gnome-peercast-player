@@ -2,8 +2,8 @@
 GNOME Peercast Player
 
 # Screenshots
-- 2016-05-08  
-  ![GNOME Peercast Player](http://ktkr3d.github.io/images/gnome-peercast-player-20160508-01.png)
+- 2016-05-12  
+  ![GNOME Peercast Player](http://ktkr3d.github.io/images/gnome-peercast-player-20160512-01.png)
 
 # Requirements
 - GNOME 3
