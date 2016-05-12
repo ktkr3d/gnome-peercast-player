@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([GNOME Peercast Player], [0.1], [https://github.com/ktkr3d/gnome-peercast-player])
+AC_INIT([GNOME Peercast Player], [0.0.1], [https://github.com/ktkr3d/gnome-peercast-player])
 
 AM_INIT_AUTOMAKE
 AM_PATH_PYTHON([2.7.11])
