@@ -38,60 +38,62 @@ class VLCWidget(Gtk.DrawingArea):
 class Handler:
     def on_window_delete_event(self, *args):
         Gtk.main_quit(*args)
+
     def on_button_quit_clicked(self, window):
         Gtk.main_quit(window)
+
     def on_button_about_clicked(self, dialog_about):
         dialog_about.run()
-        dialog_about.destroy()
+        dialog_about.hide()
+
     def on_button_preferences_clicked(self, dialog_preferences):
         dialog_preferences.run()
-        dialog_preferences.destroy()
+        dialog_preferences.hide()
 
 class Application(object):
     def __init__(self, *args, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
         self._create_main_window()
-    
+
     def _create_main_window(self):
-	builder = Gtk.Builder()
-	ui_file = os.path.join(self.pkgdatadir, "ui", "main_window.ui")
-	builder.add_from_file(ui_file)
-	builder.connect_signals(Handler())
+    	builder = Gtk.Builder()
+    	ui_file = os.path.join(self.pkgdatadir, "ui", "main_window.ui")
+    	builder.add_from_file(ui_file)
+    	builder.connect_signals(Handler())
 
-	self.window = builder.get_object("window")
-	headerbar = builder.get_object("headerbar")
-	self.window.set_titlebar(headerbar)
+    	self.window = builder.get_object("window")
+    	headerbar = builder.get_object("headerbar")
+    	self.window.set_titlebar(headerbar)
 
-	# vlc
-	stream = builder.get_object("stream")
-	stream.__vlc = VLCWidget()
-	stream.add(stream.__vlc)
-	#stream.pack_start(vlc, True, True, 0)
-	stream.player=stream.__vlc.player
-	stream_url = "https://github.com/ktkr3d/ktkr3d.github.io/blob/master/images/galaxias.mp4?raw=true"
-	#stream_url = "mmsh://localhost:7144/stream/ ..."
-	#stream_url = "http://localhost:7144/stream/ ..."
-	stream.player.set_media(instance.media_new(stream_url))
+    	# vlc
+    	stream = builder.get_object("stream")
+    	stream.__vlc = VLCWidget()
+    	stream.add(stream.__vlc)
+    	#stream.pack_start(vlc, True, True, 0)
+    	stream.player = stream.__vlc.player
+    	stream_url = "https://github.com/ktkr3d/ktkr3d.github.io/blob/master/images/galaxias.mp4?raw=true"
+    	#stream_url = "mmsh://localhost:7144/stream/ ..."
+    	#stream_url = "http://localhost:7144/stream/ ..."
+    	stream.player.set_media(instance.media_new(stream_url))
 
-	# list
-	store_list = builder.get_object("store_list")
-	store_list.append(["channel",100])
+    	# list
+    	store_list = builder.get_object("store_list")
+    	store_list.append(["channel",100])
 
-	# webkit
-	web = builder.get_object("web")
-	web_view = WebKit.WebView()
-	web_url = "https://github.com/ktkr3d/gnome-peercast-player"
-	#web_url = "http://localhost:7144/"
-	web_view.open(web_url)
-	web.add(web_view)
-	time.sleep(1)
-	stream.__vlc.player.play()
-    
+    	# webkit
+    	web = builder.get_object("web")
+    	web_view = WebKit.WebView()
+    	web_url = "https://github.com/ktkr3d/gnome-peercast-player"
+    	#web_url = "http://localhost:7144/"
+    	web_view.open(web_url)
+    	web.add(web_view)
+    	time.sleep(1)
+    	stream.__vlc.player.play()
+
     def quit(self, widget=None, data=None):
         Gtk.main_quit()
-        
+
     def run(self):
         self.window.show_all()
         Gtk.main()
-
