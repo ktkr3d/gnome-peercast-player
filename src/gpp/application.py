@@ -42,6 +42,15 @@ class Handler:
     def on_button_quit_clicked(self, window):
         Gtk.main_quit(window)
 
+    def on_button_playback_clicked(self, stream):
+    	#stream_url = "mmsh://localhost:7144/stream/ ..."
+    	#stream_url = "http://localhost:7144/stream/ ..."
+    	stream_url = "https://github.com/ktkr3d/ktkr3d.github.io/blob/master/images/galaxias.mp4?raw=true"
+    	#stream_url = "/mnt/media/home/Videos/Library/Irrlicht/galaxias_90sec.mp4"
+
+    	stream.player.set_media(instance.media_new(stream_url))
+    	stream.player.play()
+
     def on_button_about_clicked(self, dialog_about):
         dialog_about.run()
         dialog_about.hide()
@@ -51,6 +60,7 @@ class Handler:
         dialog_preferences.hide()
 
 class Application(object):
+
     def __init__(self, *args, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
@@ -70,12 +80,7 @@ class Application(object):
     	stream = builder.get_object("stream")
     	stream.__vlc = VLCWidget()
     	stream.add(stream.__vlc)
-    	#stream.pack_start(vlc, True, True, 0)
     	stream.player = stream.__vlc.player
-    	stream_url = "https://github.com/ktkr3d/ktkr3d.github.io/blob/master/images/galaxias.mp4?raw=true"
-    	#stream_url = "mmsh://localhost:7144/stream/ ..."
-    	#stream_url = "http://localhost:7144/stream/ ..."
-    	stream.player.set_media(instance.media_new(stream_url))
 
     	# list
     	store_list = builder.get_object("store_list")
@@ -88,8 +93,6 @@ class Application(object):
     	#web_url = "http://localhost:7144/"
     	web_view.open(web_url)
     	web.add(web_view)
-    	time.sleep(1)
-    	stream.__vlc.player.play()
 
     def quit(self, widget=None, data=None):
         Gtk.main_quit()

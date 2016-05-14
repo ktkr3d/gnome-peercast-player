@@ -122,30 +122,6 @@
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
             </child>
             <child type="tab">
@@ -292,10 +268,15 @@
     <property name="can_focus">False</property>
     <property name="icon_name">view-fullscreen-symbolic</property>
   </object>
-  <object class="GtkImage" id="page">
+  <object class="GtkImage" id="image_pause">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="icon_name">view-paged-symbolic</property>
+    <property name="icon_name">media-playback-pause-symbolic</property>
+  </object>
+  <object class="GtkImage" id="image_playback">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">media-playback-start-symbolic</property>
   </object>
   <object class="GtkImage" id="search">
     <property name="visible">True</property>
@@ -499,11 +480,12 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="button_layout">
+      <object class="GtkButton" id="button_playback">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="image">page</property>
+        <property name="image">image_playback</property>
+        <signal name="clicked" handler="on_button_playback_clicked" object="stream" swapped="no"/>
       </object>
       <packing>
         <property name="pack_type">end</property>
