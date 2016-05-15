@@ -83,14 +83,23 @@ class Application(object):
     	stream.player = stream.__vlc.player
 
     	# list
-    	store_list = builder.get_object("store_list")
-    	store_list.append(["channel",100])
+    	store_list = builder.get_object("liststore1")
+    	store_list.append(["Channel A",100,"surl","curl","FLV",512,"comment","1:00"])
+    	store_list.append(["Channel Miku",200,"https://github.com/ktkr3d/ktkr3d.github.io/blob/master/images/galaxias.mp4?raw=true","https://github.com/ktkr3d/gnome-peercast-player","MP4",545,"comment","0:09"])
 
     	# webkit
     	web = builder.get_object("web")
     	web_view = WebKit.WebView()
     	web_url = "https://github.com/ktkr3d/gnome-peercast-player"
     	#web_url = "http://localhost:7144/"
+        settings = web_view.get_settings()
+        settings.set_property('user-stylesheet-uri', 'user-style.css')
+        settings.set_property('enable-universal-access-from-file-uris', True)
+        web_view.set_settings(settings)
+        #web_view.connect("load-started", self.on_load_started)
+        #web_view.connect("load-finished", self.on_load_finished)
+        #web_view.connect("title-changed", self.on_title_changed)
+        #web_view.connect("hovering-over-link", self.on_hovering_over_link)
     	web_view.open(web_url)
     	web.add(web_view)
 
