@@ -28,7 +28,6 @@ $ sudo make install
 ```
 
 # Start application
-**Volume Warning!**
 ```bash
 $ gnome-peercast-player
 ```

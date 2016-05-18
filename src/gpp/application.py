@@ -57,6 +57,7 @@ class Handler:
         dialog_preferences.hide()
 
     def on_button_refresh_clicked(self, liststore):
+        liststore.clear()
         req = urllib2.Request("http://peercast.takami98.net/multi-yp/index.txt")
         res = urllib2.urlopen(req)
         arrayChannelData = res.read().splitlines()
@@ -101,18 +102,22 @@ class Application(object):
     	builder.add_from_file(ui_file)
     	builder.connect_signals(Handler())
 
+        # objects
     	self.window = builder.get_object("window")
+    	stream = builder.get_object("stream")
+    	web = builder.get_object("web")
+    	statusbar = builder.get_object("statusbar")
+
+        # header bar
     	headerbar = builder.get_object("headerbar")
     	self.window.set_titlebar(headerbar)
 
     	# vlc
-    	stream = builder.get_object("stream")
     	stream.__vlc = VLCWidget()
     	stream.add(stream.__vlc)
     	stream.player = stream.__vlc.player
 
     	# webkit
-    	web = builder.get_object("web")
     	web_view = WebKit.WebView()
     	web_url = "http://localhost:7144/"
         settings = web_view.get_settings()
@@ -126,9 +131,7 @@ class Application(object):
     	web_view.open(web_url)
     	web.add(web_view)
 
-        # status bar
-    	statusbar = builder.get_object("statusbar")
-
+        # handler
         Handler.headerbar = headerbar
         Handler.web_view = web_view
         Handler.stream = stream
