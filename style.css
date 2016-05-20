@@ -1,3 +1,4 @@
 a:hover, a:active {
+    color: yellow !important;
     text-decoration: none !important;
 }

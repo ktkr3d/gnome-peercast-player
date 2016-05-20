@@ -139,10 +139,8 @@ class Application(object):
         webview.preferences().setUserStyleSheetLocation_("user-style.css")
         print webview.preferences().userStyleSheetLocation()
         """
-        settings = web_view.get_settings()
-        settings.set_property('enable-universal-access-from-file-uris', True)
-        settings.set_property('user-stylesheet-uri', 'file:///mnt/common/repos/gnome-peercast-player/style.css')
-        web_view.set_settings(settings)
+        web_view.get_settings().set_property('enable-universal-access-from-file-uris', True)
+        web_view.get_settings().set_property('user-stylesheet-uri', 'file:///mnt/common/repos/gnome-peercast-player/style.css')
         #web_view.connect("load-started", self.on_load_started)
         #web_view.connect("load-finished", self.on_load_finished)
         #web_view.connect("title-changed", self.on_title_changed)
