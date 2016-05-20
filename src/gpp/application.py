@@ -1,21 +1,15 @@
 #!/usr/bin/python
 
-import os
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+gi.require_version('WebKit', '3.0')
+from gi.repository import Gtk, WebKit, Gdk
 
+import os
 import urllib2
-
-# vlc
 import time
 import sys
 import vlc
-
-# webkit
-import gi
-gi.require_version('WebKit', '3.0')
-from gi.repository import WebKit
 
 from gettext import gettext as _
 
@@ -36,6 +30,7 @@ class VLCWidget(Gtk.DrawingArea):
         self.set_size_request(400, 300)
 
 class Handler:
+
     def on_window_delete_event(self, *args):
         Gtk.main_quit(*args)
 
@@ -66,7 +61,7 @@ class Handler:
             channel = channelData[0].replace("&gt;", ">").replace("&lt;", "<").replace("&amp;", "&").replace("&quot;", '"').replace("&#039;", "'")
             listeners = int(channelData[6])
             print(channel)
-            streamurl = "mmsh://localhost:7144/stream/" + channelData[1] + "?tip=" + channelData[2]
+            streamurl = "mmsh://" + self.peercast_server + ":" + self.peercast_port + "/stream/" + channelData[1] + "?tip=" + channelData[2]
             liststore.append([channel,listeners,streamurl,channelData[3],channelData[9],int(channelData[8]),channelData[4]+channelData[5]+channelData[17],channelData[15]])
         context_id = self.statusbar.get_context_id("message")
         message_id = self.statusbar.push(context_id, "channels: " + str(len(arrayChannelData)))
@@ -85,8 +80,22 @@ class Handler:
         window.fullscreen()
         print("fullscreen button clicked")
 
-class Application(object):
+    def on_window_window_state_event(self, widget, event, data=None):
+        self.window_current_state = event.new_window_state
 
+    def toggle_fullscreen(self):
+        if self.window_current_state & Gdk.WindowState.FULLSCREEN:
+            self.window.unfullscreen()
+        else:
+            self.window.fullscreen()
+
+    def on_window_key_press_event(self, widget, event):
+        key = event.keyval
+        if key == 0xffc8:
+            self.toggle_fullscreen()
+        return False
+
+class Application(object):
     def on_button_preferences_clicked(self, dialog_preferences):
         dialog_preferences.run()
         dialog_preferences.hide()
@@ -117,25 +126,41 @@ class Application(object):
     	stream.add(stream.__vlc)
     	stream.player = stream.__vlc.player
 
+        peercast_server = "192.168.0.2"
+        peercast_port = "7144"
+
     	# webkit
     	web_view = WebKit.WebView()
-    	web_url = "http://localhost:7144/"
+    	web_url = "http://" + peercast_server + ":" + peercast_port
+
+        """
+        web_view.preferences().setUserStyleSheetEnabled_(objc.YES)
+        print web_view.preferences().userStyleSheetEnabled()
+        webview.preferences().setUserStyleSheetLocation_("user-style.css")
+        print webview.preferences().userStyleSheetLocation()
+        """
         settings = web_view.get_settings()
-        settings.set_property('user-stylesheet-uri', 'user-style.css')
         settings.set_property('enable-universal-access-from-file-uris', True)
+        settings.set_property('user-stylesheet-uri', 'file:///mnt/common/repos/gnome-peercast-player/style.css')
         web_view.set_settings(settings)
         #web_view.connect("load-started", self.on_load_started)
         #web_view.connect("load-finished", self.on_load_finished)
         #web_view.connect("title-changed", self.on_title_changed)
         #web_view.connect("hovering-over-link", self.on_hovering_over_link)
+
     	web_view.open(web_url)
     	web.add(web_view)
 
+        # accel
+
         # handler
+        Handler.window = self.window
         Handler.headerbar = headerbar
         Handler.web_view = web_view
         Handler.stream = stream
         Handler.statusbar = statusbar
+        Handler.peercast_server = peercast_server
+        Handler.peercast_port = peercast_port
 
     def quit(self, widget=None, data=None):
         Gtk.main_quit()
