@@ -94,6 +94,18 @@ class Handler:
             self.toggle_fullscreen()
         return False
 
+    def on_checkbutton_list_toggled(self, list):
+        if self.checkbutton_list.get_active():
+            list.show_all()
+        else:
+            list.hide()
+
+    def on_checkbutton_web_toggled(self, web):
+        if self.checkbutton_web.get_active():
+            web.show_all()
+        else:
+            web.hide()
+
 class Application(object):
     def __init__(self, *args, **kwargs):
         for key in kwargs:
@@ -111,6 +123,8 @@ class Application(object):
     	stream = builder.get_object("stream")
     	web = builder.get_object("web")
     	statusbar = builder.get_object("statusbar")
+    	Handler.checkbutton_list = builder.get_object("checkbutton_list")
+    	Handler.checkbutton_web = builder.get_object("checkbutton_web")
 
         # header bar
     	headerbar = builder.get_object("headerbar")
