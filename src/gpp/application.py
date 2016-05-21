@@ -27,10 +27,9 @@ class VLCWidget(Gtk.DrawingArea):
                  self.player.set_xwindow(thewindow.get_xid())
             return True
         self.connect("map", handle_embed)
-        self.set_size_request(400, 300)
+        self.set_size_request(400, 240)
 
 class Handler:
-
     def on_window_delete_event(self, *args):
         Gtk.main_quit(*args)
 
@@ -96,10 +95,6 @@ class Handler:
         return False
 
 class Application(object):
-    def on_button_preferences_clicked(self, dialog_preferences):
-        dialog_preferences.run()
-        dialog_preferences.hide()
-
     def __init__(self, *args, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
@@ -159,6 +154,7 @@ class Application(object):
         Handler.statusbar = statusbar
         Handler.peercast_server = peercast_server
         Handler.peercast_port = peercast_port
+        self.window.set_position(Gtk.WindowPosition.CENTER)
 
     def quit(self, widget=None, data=None):
         Gtk.main_quit()
