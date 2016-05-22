@@ -75,7 +75,8 @@ class Handler:
         self.contact_url = liststore[iter][3]
         self.web_url = self.contact_url
     	self.web_view.open(self.web_url)
-        self.headerbar.set_subtitle(liststore[iter][0])
+        self.headerbar.set_title(liststore[iter][0])
+        self.headerbar.set_subtitle(liststore[iter][6])
 
     def on_button_fullscreen_clicked(self, window):
         window.fullscreen()
@@ -153,7 +154,7 @@ class Application(object):
     	web_view.open(web_url)
     	web.add(web_view)
 
-        # accel
+        # list
 
         # handler
         Handler.window = self.window
@@ -166,6 +167,10 @@ class Application(object):
         Handler.peercast_server = peercast_server
         Handler.peercast_port = peercast_port
         Handler.peercast_url = peercast_url
+
+    	liststore = builder.get_object("liststore1")
+    	liststore.set_sort_column_id(1, True)
+        Handler.on_button_refresh_clicked(Handler(), liststore)
 
         self.window.set_position(Gtk.WindowPosition.CENTER)
 
