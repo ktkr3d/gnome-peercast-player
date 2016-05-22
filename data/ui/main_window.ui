@@ -273,6 +273,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">media-playback-pause-symbolic</property>
   </object>
+  <object class="GtkImage" id="image_peercast">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">user-home-symbolic</property>
+  </object>
   <object class="GtkImage" id="image_playback">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -531,7 +536,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="image">image_playback</property>
+        <property name="image">image_peercast</property>
         <signal name="clicked" handler="on_button_playback_clicked" object="stream" swapped="no"/>
       </object>
       <packing>

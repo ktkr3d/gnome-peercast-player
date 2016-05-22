@@ -37,10 +37,11 @@ class Handler:
         Gtk.main_quit(window)
 
     def on_button_playback_clicked(self, stream):
-        self.__stream = stream
-    	stream_url = "https://github.com/ktkr3d/ktkr3d.github.io/blob/master/images/galaxias.mp4?raw=true"
-    	stream.player.set_media(instance.media_new(stream_url))
-    	stream.player.play()
+        if self.web_url == self.peercast_url:
+            self.web_url = self.contact_url
+        else:
+            self.web_url = self.peercast_url
+        self.web_view.open(self.web_url)
 
     def on_button_about_clicked(self, dialog_about):
         dialog_about.run()
@@ -71,8 +72,9 @@ class Handler:
         print(stream_url)
     	self.stream.player.set_media(instance.media_new(stream_url))
     	self.stream.player.play()
-        web_url = liststore[iter][3]
-    	self.web_view.open(web_url)
+        self.contact_url = liststore[iter][3]
+        self.web_url = self.contact_url
+    	self.web_view.open(self.web_url)
         self.headerbar.set_subtitle(liststore[iter][0])
 
     def on_button_fullscreen_clicked(self, window):
@@ -140,21 +142,14 @@ class Application(object):
 
     	# webkit
     	web_view = WebKit.WebView()
-    	web_url = "http://" + peercast_server + ":" + peercast_port
+    	peercast_url = "http://" + peercast_server + ":" + peercast_port
 
-        """
-        web_view.preferences().setUserStyleSheetEnabled_(objc.YES)
-        print web_view.preferences().userStyleSheetEnabled()
-        webview.preferences().setUserStyleSheetLocation_("user-style.css")
-        print webview.preferences().userStyleSheetLocation()
-        """
+        # Custom Stylesheet
+    	style_file = os.path.join(self.pkgdatadir, "ui", "style.css")
         web_view.get_settings().set_property('enable-universal-access-from-file-uris', True)
-        web_view.get_settings().set_property('user-stylesheet-uri', 'file:///mnt/common/repos/gnome-peercast-player/style.css')
-        #web_view.connect("load-started", self.on_load_started)
-        #web_view.connect("load-finished", self.on_load_finished)
-        #web_view.connect("title-changed", self.on_title_changed)
-        #web_view.connect("hovering-over-link", self.on_hovering_over_link)
+        web_view.get_settings().set_property('user-stylesheet-uri', style_file)
 
+        web_url = peercast_url
     	web_view.open(web_url)
     	web.add(web_view)
 
@@ -164,10 +159,14 @@ class Application(object):
         Handler.window = self.window
         Handler.headerbar = headerbar
         Handler.web_view = web_view
+        Handler.web_url = web_url
+        Handler.contact_url = peercast_url
         Handler.stream = stream
         Handler.statusbar = statusbar
         Handler.peercast_server = peercast_server
         Handler.peercast_port = peercast_port
+        Handler.peercast_url = peercast_url
+
         self.window.set_position(Gtk.WindowPosition.CENTER)
 
     def quit(self, widget=None, data=None):
