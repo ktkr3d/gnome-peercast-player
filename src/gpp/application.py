@@ -59,10 +59,15 @@ class Handler:
         for i in range(0, len(arrayChannelData)):
             channelData = arrayChannelData[i].split("<>")
             channel = channelData[0].replace("&gt;", ">").replace("&lt;", "<").replace("&amp;", "&").replace("&quot;", '"').replace("&#039;", "'")
+            comment = "[" + channelData[4] + " - "+ channelData[5] + "]" + channelData[17]
+            comment = comment.replace("&gt;", ">").replace("&lt;", "<").replace("&amp;", "&").replace("&quot;", '"').replace("&#039;", "'")
             listeners = int(channelData[6])
             print(channel)
-            streamurl = "mmsh://" + self.peercast_server + ":" + self.peercast_port + "/stream/" + channelData[1] + "?tip=" + channelData[2]
-            liststore.append([channel,listeners,streamurl,channelData[3],channelData[9],int(channelData[8]),channelData[4]+channelData[5]+channelData[17],channelData[15]])
+            if channelData[9] in ["WMV","WMA"]:
+                streamurl = "mmsh://" + self.peercast_server + ":" + self.peercast_port + "/stream/" + channelData[1] + "?tip=" + channelData[2]
+            else:
+                streamurl = "http://" + self.peercast_server + ":" + self.peercast_port + "/stream/" + channelData[1] + "?tip=" + channelData[2]
+            liststore.append([channel,listeners,streamurl,channelData[3],channelData[9],int(channelData[8]),comment,channelData[15]])
         context_id = self.statusbar.get_context_id("message")
         message_id = self.statusbar.push(context_id, "channels: " + str(len(arrayChannelData)))
 
