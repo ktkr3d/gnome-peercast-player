@@ -3,13 +3,16 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('WebKit', '3.0')
-from gi.repository import Gtk, WebKit, Gdk
+gi.require_version('Notify', '0.7')
+from gi.repository import Gtk, WebKit, Gdk, Notify
 
 import os
 import urllib2
 import time
 import sys
+import socket
 import vlc
+import pickle
 
 from gettext import gettext as _
 
@@ -48,8 +51,13 @@ class Handler:
         dialog_about.hide()
 
     def on_button_preferences_clicked(self, dialog_preferences):
+        self.entry_peercast_server.set_text(self.conf["peercast_server"])
+        self.spinbutton_peercast_port.set_value(int(self.conf["peercast_port"]))
         dialog_preferences.run()
         dialog_preferences.hide()
+        self.conf["peercast_server"] = self.entry_peercast_server.get_text()
+        self.conf["peercast_port"] = str(self.spinbutton_peercast_port.get_value_as_int())
+        pickle.dump(self.conf, open(self.path_conf, "w"))
 
     def on_button_refresh_clicked(self, liststore):
         liststore.clear()
@@ -133,6 +141,8 @@ class Application(object):
     	statusbar = builder.get_object("statusbar")
     	Handler.checkbutton_list = builder.get_object("checkbutton_list")
     	Handler.checkbutton_web = builder.get_object("checkbutton_web")
+    	Handler.entry_peercast_server = builder.get_object("entry_peercast_server")
+    	Handler.spinbutton_peercast_port = builder.get_object("spinbutton_peercast_port")
 
         # header bar
     	headerbar = builder.get_object("headerbar")
@@ -143,8 +153,22 @@ class Application(object):
     	stream.add(stream.__vlc)
     	stream.player = stream.__vlc.player
 
-        peercast_server = "192.168.0.2"
-        peercast_port = "7144"
+        # load settings
+        path_conf = os.environ["HOME"] + "/.gnome-peercast-player"
+        print(path_conf)
+        if os.path.exists(path_conf):
+            conf = pickle.load(open(path_conf))
+            peercast_server = conf["peercast_server"]
+            peercast_port = conf["peercast_port"]
+        else:
+            peercast_server = "localhost"
+            peercast_port = "7144"
+
+        # save settings
+        conf = {"version": "0.0.3", "peercast_server": peercast_server, "peercast_port": peercast_port}
+        Handler.conf = conf
+        Handler.path_conf = path_conf
+        pickle.dump(conf, open(path_conf, "w"))
 
     	# webkit
     	web_view = WebKit.WebView()
@@ -154,6 +178,20 @@ class Application(object):
     	style_file = os.path.join(self.pkgdatadir, "ui", "style.css")
         web_view.get_settings().set_property('enable-universal-access-from-file-uris', True)
         web_view.get_settings().set_property('user-stylesheet-uri', style_file)
+
+        # check peercast server & port
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            s.connect((peercast_server, int(peercast_port)))
+            s.close()
+        except socket.error as e:
+            Notify.init('GNOME Peercast Player')
+            notification = Notify.Notification.new(
+                    'GNOME Peercast Player',
+                    'Cannot connect to peercast server. (%s:%s)' % (peercast_server, peercast_port),
+                    'dialog-warning'
+                )
+            notification.show()
 
         web_url = peercast_url
     	web_view.open(web_url)
