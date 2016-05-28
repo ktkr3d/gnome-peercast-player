@@ -187,8 +187,8 @@ class Application(object):
         except socket.error as e:
             Notify.init('GNOME Peercast Player')
             notification = Notify.Notification.new(
-                    'GNOME Peercast Player',
-                    'Cannot connect to peercast server. (%s:%s)' % (peercast_server, peercast_port),
+                    'Cannot connect to peercast server.',
+                    'port (%s:%s) is not open.' % (peercast_server, peercast_port),
                     'dialog-warning'
                 )
             notification.show()

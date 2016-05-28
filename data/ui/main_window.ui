@@ -178,7 +178,7 @@
                       <object class="GtkTreeViewColumn" id="treeviewcolumn_pop">
                         <property name="resizable">True</property>
                         <property name="sizing">autosize</property>
-                        <property name="fixed_width">50</property>
+                        <property name="fixed_width">45</property>
                         <property name="title" translatable="yes">#</property>
                         <property name="clickable">True</property>
                         <property name="reorderable">True</property>
@@ -186,7 +186,9 @@
                         <property name="sort_order">descending</property>
                         <property name="sort_column_id">1</property>
                         <child>
-                          <object class="GtkCellRendererText"/>
+                          <object class="GtkCellRendererText">
+                            <property name="xalign">1</property>
+                          </object>
                           <attributes>
                             <attribute name="text">1</attribute>
                           </attributes>
@@ -198,6 +200,10 @@
                         <property name="resizable">True</property>
                         <property name="fixed_width">200</property>
                         <property name="title" translatable="yes">Comment</property>
+                        <property name="clickable">True</property>
+                        <property name="reorderable">True</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">2</property>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>
@@ -212,6 +218,10 @@
                         <property name="sizing">autosize</property>
                         <property name="fixed_width">50</property>
                         <property name="title" translatable="yes">Type</property>
+                        <property name="clickable">True</property>
+                        <property name="reorderable">True</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">3</property>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>
@@ -226,8 +236,14 @@
                         <property name="sizing">autosize</property>
                         <property name="fixed_width">50</property>
                         <property name="title" translatable="yes">kbps</property>
+                        <property name="clickable">True</property>
+                        <property name="reorderable">True</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">4</property>
                         <child>
-                          <object class="GtkCellRendererText"/>
+                          <object class="GtkCellRendererText">
+                            <property name="xalign">1</property>
+                          </object>
                           <attributes>
                             <attribute name="text">5</attribute>
                           </attributes>
@@ -239,9 +255,15 @@
                         <property name="resizable">True</property>
                         <property name="sizing">autosize</property>
                         <property name="fixed_width">50</property>
-                        <property name="title" translatable="yes">Min</property>
+                        <property name="title" translatable="yes">Time</property>
+                        <property name="clickable">True</property>
+                        <property name="reorderable">True</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">5</property>
                         <child>
-                          <object class="GtkCellRendererText"/>
+                          <object class="GtkCellRendererText">
+                            <property name="xalign">1</property>
+                          </object>
                           <attributes>
                             <attribute name="text">7</attribute>
                           </attributes>
@@ -335,7 +357,17 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="liststore2"/>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name yellow_page_url -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">http://peercast.takami98.net/multi-yp/</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="diablog_preferences">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
@@ -372,8 +404,27 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="margin_left">10</property>
+                <property name="margin_right">10</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkCheckButton">
+                    <property name="label" translatable="yes">Enable Notify</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_top">10</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -381,7 +432,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Srart up</property>
+                <property name="label" translatable="yes">Behavior</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -404,6 +455,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">10</property>
+                    <property name="margin_top">10</property>
                     <property name="label" translatable="yes">Host:</property>
                   </object>
                   <packing>
@@ -416,6 +468,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">10</property>
+                    <property name="margin_top">10</property>
                     <property name="label" translatable="yes">Port:</property>
                   </object>
                   <packing>
@@ -427,6 +480,7 @@
                   <object class="GtkEntry" id="entry_peercast_server">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_top">10</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -437,6 +491,7 @@
                   <object class="GtkSpinButton" id="spinbutton_peercast_port">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_top">10</property>
                     <property name="max_length">5</property>
                     <property name="progress_pulse_step">1</property>
                     <property name="input_purpose">number</property>
@@ -491,6 +546,21 @@
                             <property name="model">liststore2</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="title" translatable="yes">Yellow Page URL</property>
+                                <property name="clickable">True</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                    <attribute name="background-rgba">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
                             </child>
                           </object>
                         </child>
