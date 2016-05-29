@@ -92,6 +92,7 @@ class Handler:
         self.headerbar.set_subtitle(liststore[iter][6])
 
     def on_button_fullscreen_clicked(self, window):
+        self.statusbar.hide()
         window.fullscreen()
         print("fullscreen button clicked")
 
@@ -100,8 +101,10 @@ class Handler:
 
     def toggle_fullscreen(self):
         if self.window_current_state & Gdk.WindowState.FULLSCREEN:
+            self.statusbar.show()
             self.window.unfullscreen()
         else:
+            self.statusbar.hide()
             self.window.fullscreen()
 
     def on_window_key_press_event(self, widget, event):
@@ -132,7 +135,6 @@ class Handler:
     def on_searchentry_changed(self, liststore):
         self.filter.refilter()
         print("on search entry")
-
 
 class Application(object):
     def __init__(self, *args, **kwargs):
