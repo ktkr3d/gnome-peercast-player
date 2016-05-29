@@ -122,6 +122,18 @@ class Handler:
         else:
             web.hide()
 
+    def on_togglebutton_find_toggled(self, searchentry):
+        if self.togglebutton_find.get_active():
+            searchentry.show()
+            searchentry.grab_focus_without_selecting()
+        else:
+            searchentry.hide()
+
+    def on_searchentry_changed(self, liststore):
+        self.filter.refilter()
+        print("on search entry")
+
+
 class Application(object):
     def __init__(self, *args, **kwargs):
         for key in kwargs:
@@ -136,9 +148,11 @@ class Application(object):
 
         # objects
     	self.window = builder.get_object("window")
+    	self.searchentry = builder.get_object("searchentry")
     	stream = builder.get_object("stream")
     	web = builder.get_object("web")
     	statusbar = builder.get_object("statusbar")
+    	Handler.togglebutton_find = builder.get_object("togglebutton_find")
     	Handler.checkbutton_list = builder.get_object("checkbutton_list")
     	Handler.checkbutton_web = builder.get_object("checkbutton_web")
     	Handler.entry_peercast_server = builder.get_object("entry_peercast_server")
@@ -212,14 +226,30 @@ class Application(object):
         Handler.peercast_url = peercast_url
 
     	liststore = builder.get_object("liststore1")
+    	liststore_filter = builder.get_object("liststore1_filter")
+        self.keyword = ""
+        #Handler.filter = liststore.filter_new()
+        liststore_filter.set_visible_func(self.filter_func)
+        Handler.filter = liststore_filter
     	liststore.set_sort_column_id(1, True)
         Handler.on_button_refresh_clicked(Handler(), liststore)
 
         self.window.set_position(Gtk.WindowPosition.CENTER)
+
+    def filter_func(self, model, iter, keyword):
+        self.keyword = self.searchentry.get_text()
+        print("filter_func has called. %s" % self.keyword)
+        if self.keyword == "":
+            print("keyword is empty.")
+            return True
+        else:
+            return self.keyword.lower() in model[iter][0].lower() or self.keyword.lower() in model[iter][6].lower()
+            #return False
 
     def quit(self, widget=None, data=None):
         Gtk.main_quit()
 
     def run(self):
         self.window.show_all()
+        self.searchentry.hide()
         Gtk.main()
