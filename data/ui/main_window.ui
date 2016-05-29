@@ -178,7 +178,7 @@
                         <property name="reorderable">True</property>
                         <property name="search_column">0</property>
                         <property name="enable_grid_lines">horizontal</property>
-                        <signal name="row-activated" handler="on___glade_unnamed_28_row_activated" object="liststore1" swapped="no"/>
+                        <signal name="row-activated" handler="on___glade_unnamed_28_row_activated" object="liststore1_filter" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
