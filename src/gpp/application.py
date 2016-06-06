@@ -32,7 +32,8 @@ class VLCWidget(Gtk.DrawingArea):
         self.connect("map", handle_embed)
         self.set_size_request(400, 240)
 
-class Handler:
+
+class Application(object):
     def on_window_delete_event(self, *args):
         Gtk.main_quit(*args)
 
@@ -136,7 +137,6 @@ class Handler:
         self.filter.refilter()
         print("on search entry")
 
-class Application(object):
     def __init__(self, *args, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
@@ -146,7 +146,7 @@ class Application(object):
     	builder = Gtk.Builder()
     	ui_file = os.path.join(self.pkgdatadir, "ui", "main_window.ui")
     	builder.add_from_file(ui_file)
-    	builder.connect_signals(Handler())
+    	builder.connect_signals(self)
 
         # objects
     	self.window = builder.get_object("window")
@@ -154,11 +154,11 @@ class Application(object):
     	stream = builder.get_object("stream")
     	web = builder.get_object("web")
     	statusbar = builder.get_object("statusbar")
-    	Handler.togglebutton_find = builder.get_object("togglebutton_find")
-    	Handler.checkbutton_list = builder.get_object("checkbutton_list")
-    	Handler.checkbutton_web = builder.get_object("checkbutton_web")
-    	Handler.entry_peercast_server = builder.get_object("entry_peercast_server")
-    	Handler.spinbutton_peercast_port = builder.get_object("spinbutton_peercast_port")
+    	self.togglebutton_find = builder.get_object("togglebutton_find")
+    	self.checkbutton_list = builder.get_object("checkbutton_list")
+    	self.checkbutton_web = builder.get_object("checkbutton_web")
+    	self.entry_peercast_server = builder.get_object("entry_peercast_server")
+    	self.spinbutton_peercast_port = builder.get_object("spinbutton_peercast_port")
 
         # header bar
     	headerbar = builder.get_object("headerbar")
@@ -182,8 +182,8 @@ class Application(object):
 
         # save settings
         conf = {"version": "0.0.3", "peercast_server": peercast_server, "peercast_port": peercast_port}
-        Handler.conf = conf
-        Handler.path_conf = path_conf
+        self.conf = conf
+        self.path_conf = path_conf
         pickle.dump(conf, open(path_conf, "w"))
 
     	# webkit
@@ -213,29 +213,25 @@ class Application(object):
     	web_view.open(web_url)
     	web.add(web_view)
 
-        # list
-
         # handler
-        Handler.window = self.window
-        Handler.headerbar = headerbar
-        Handler.web_view = web_view
-        Handler.web_url = web_url
-        Handler.contact_url = peercast_url
-        Handler.stream = stream
-        Handler.statusbar = statusbar
-        Handler.peercast_server = peercast_server
-        Handler.peercast_port = peercast_port
-        Handler.peercast_url = peercast_url
+        self.window = self.window
+        self.headerbar = headerbar
+        self.web_view = web_view
+        self.web_url = web_url
+        self.contact_url = peercast_url
+        self.stream = stream
+        self.statusbar = statusbar
+        self.peercast_server = peercast_server
+        self.peercast_port = peercast_port
+        self.peercast_url = peercast_url
 
     	liststore = builder.get_object("liststore1")
     	liststore_filter = builder.get_object("liststore1_filter")
         self.keyword = ""
-        #Handler.filter = liststore.filter_new()
         liststore_filter.set_visible_func(self.filter_func)
-        Handler.filter = liststore_filter
+        self.filter = liststore_filter
     	liststore.set_sort_column_id(1, True)
-        Handler.on_button_refresh_clicked(Handler(), liststore)
-
+        self.on_button_refresh_clicked(liststore)
         self.window.set_position(Gtk.WindowPosition.CENTER)
 
     def filter_func(self, model, iter, keyword):
@@ -246,7 +242,6 @@ class Application(object):
             return True
         else:
             return self.keyword.lower() in model[iter][0].lower() or self.keyword.lower() in model[iter][6].lower()
-            #return False
 
     def quit(self, widget=None, data=None):
         Gtk.main_quit()
